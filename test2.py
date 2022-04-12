@@ -33,6 +33,7 @@ while True:
             display.show(Image.NO)
             continue
     
+    
     if button_b.was_pressed():
         cur_freq = 0
         radio.config(channel=0)
