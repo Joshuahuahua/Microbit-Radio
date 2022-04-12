@@ -13,9 +13,7 @@ def listen():
     if message == None:
         return ['None', 0, 0]
     else:
-        print('b4', message)
         temp = message.split(':')
-        print('aftr', temp)
         temp[1] = int(temp[1])
         temp[2] = int(temp[2])
         return temp
@@ -36,7 +34,8 @@ while True:
         if dif in range(-2, 3):
             cur_freq = message[1]
             radio.config(channel=1)
-            #print('caught up. cur freq', cur_freq)
+            display.show(Image.YES)
+            sleep(500)
 
     if message[0] == 'code' and message[1] == cur_freq:
         display.show(Image(img))
@@ -58,7 +57,6 @@ while True:
         send('pair')
         sleep(500)
         message = listen()
-        #print('message', message)
         if message[0] != 'pair':
             display.show(Image.SAD)
             sleep(500)
@@ -72,26 +70,20 @@ while True:
             sleep(60)
             while True:
                 nxt_msg = listen()
-                #print('message', nxt_msg)
                 if nxt_msg[0] == 'pong' and nxt_msg[1] not in msg_bank:
                     send('pong', nxt_msg[1])
-                    #print('added')
                     msg_bank.append(nxt_msg[1])
                 elif nxt_msg[0] == 'None':
                     break
 
-            #print('bank', msg_bank)
             for i in range(1, len(msg_bank)+2):
-                #print('i', i)
                 if i not in msg_bank:
-                    #print('free')
                     display.show(Image.YES)
                     sleep(1000)
                     cur_freq = i
-                    #print('cur_freq', i)
                     sleep(500)
                     radio.config(channel=0)
-                    send('join')
+                    send('join', cur_freq)
                     radio.config(channel=1)
                     break
     
